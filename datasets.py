@@ -90,8 +90,8 @@ def get_imgs(img_path, imsize, bbox=None,
 
 class TextDataset(data.Dataset):
     def __init__(self, data_dir, split='train',
-                 base_size=64,
-                 transform=None, target_transform=None):
+                    base_size=64,
+                    transform=None, target_transform=None):
         self.transform = transform
         self.norm = transforms.Compose([
             transforms.ToTensor(),
@@ -217,6 +217,8 @@ class TextDataset(data.Dataset):
                 ixtoword, wordtoix, len(ixtoword)]
 
     def load_text_data(self, data_dir, split):
+        #filepath = os.path.join(data_dir, 'bird_captions.pickle')
+        #Use Attention Caption pickle
         filepath = os.path.join(data_dir, 'bird_captions.pickle')
         train_names = self.load_filenames(data_dir, 'train')
         test_names = self.load_filenames(data_dir, 'test')
