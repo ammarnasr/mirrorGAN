@@ -167,8 +167,9 @@ class CNN_ENCODER(nn.Module):
             self.nef = nef
         else:
             self.nef = 256  # define a uniform ranker
-
+        print('----before----')
         model = models.inception_v3()
+        print('----after----')
         url = 'https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth'
         model.load_state_dict(model_zoo.load_url(url))
         for param in model.parameters():
