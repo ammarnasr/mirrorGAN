@@ -220,15 +220,16 @@ class TextDataset(data.Dataset):
         filepath = os.path.join(data_dir, 'bird_captions.pickle')
         train_names = self.load_filenames(data_dir, 'train')
         test_names = self.load_filenames(data_dir, 'test')
+        print ('--------------------Load Text Data--------------------------------------')
+        print('FilePath: ', filepath , 'Does Exist : ', not os.path.isfile(filepath))
         if not os.path.isfile(filepath):
             train_captions = self.load_captions(data_dir, train_names)
             test_captions = self.load_captions(data_dir, test_names)
 
-            train_captions, test_captions, ixtoword, wordtoix, n_words = \
-                self.build_dictionary(train_captions, test_captions)
+            train_captions, test_captions, ixtoword, wordtoix, n_words = self.build_dictionary(train_captions, test_captions)
             with open(filepath, 'wb') as f:
                 pickle.dump([train_captions, test_captions,
-                             ixtoword, wordtoix], f, protocol=2)
+                                ixtoword, wordtoix], f, protocol=2)
                 print('Save to: ', filepath)
         else:
             with open(filepath, 'rb') as f:
