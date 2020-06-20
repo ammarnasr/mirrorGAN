@@ -119,16 +119,15 @@ if __name__ == "__main__":
         transforms.Scale(int(imsize * 76 / 64)),
         transforms.RandomCrop(imsize),
         transforms.RandomHorizontalFlip()])
-    dataset = TextDataset(cfg.DATA_DIR, split_dir,
-                          base_size=cfg.TREE.BASE_SIZE,
-                          transform=image_transform)
+    dataset = TextDataset(cfg.DATA_DIR, split_dir, base_size=cfg.TREE.BASE_SIZE, transform=image_transform)
+    print("Dataset: ", dataset)
     assert dataset
-    dataloader = torch.utils.data.DataLoader(
-        dataset, batch_size=cfg.TRAIN.BATCH_SIZE,
-        drop_last=True, shuffle=bshuffle, num_workers=int(cfg.WORKERS))
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=cfg.TRAIN.BATCH_SIZE, drop_last=True, shuffle=bshuffle, num_workers=int(cfg.WORKERS))
+    print("Dataloader: ", dataloader)
 
     # Define models and go to train/evaluate
     algo = trainer(output_dir, dataloader, dataset.n_words, dataset.ixtoword)
+    print("Trainer: ", trainer)
 
     start_t = time.time()
     if cfg.TRAIN.FLAG:
