@@ -30,7 +30,7 @@ CAP:
     hidden_size: 256
     num_layers: 1
     learning_rate: 0.001
-    caption_cnn_path: '../data/STREAM/cnn_encoder.ckpt'
+    caption_cnn_path: '../data/STREAM/encoder-5-3000.pkl'
     caption_rnn_path: '../data/STREAM/rnn_decoder.ckpt'
 
 GAN:
