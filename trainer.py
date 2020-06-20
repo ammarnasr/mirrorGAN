@@ -15,6 +15,8 @@ from model import RNN_ENCODER, CNN_ENCODER, CAPTION_CNN, CAPTION_RNN
 from miscc.losses import words_loss
 from miscc.losses import discriminator_loss, generator_loss, KL_loss
 import os
+
+
 import time
 import numpy as np
 
@@ -57,8 +59,6 @@ class Trainer(object):
         image_encoder.eval()
 
         text_encoder = RNN_ENCODER(self.n_words, nhidden=cfg.TEXT.EMBEDDING_DIM)
-        print ('------------------------The text encode:------------------------------')
-        print(text_encoder)
         state_dict = torch.load(cfg.TRAIN.NET_E, map_location=lambda storage, loc: storage)
         text_encoder.load_state_dict(state_dict)
         for p in text_encoder.parameters():
@@ -143,8 +143,8 @@ class Trainer(object):
         num_Ds = len(netsD)
         for i in range(num_Ds):
             opt = optim.Adam(netsD[i].parameters(),
-                             lr=cfg.TRAIN.DISCRIMINATOR_LR,
-                             betas=(0.5, 0.999))
+                                lr=cfg.TRAIN.DISCRIMINATOR_LR,
+                                betas=(0.5, 0.999))
             optimizersD.append(opt)
 
         optimizerG = optim.Adam(netG.parameters(),
@@ -168,14 +168,15 @@ class Trainer(object):
     def save_model(self, netG, avg_param_G, netsD, epoch):
         backup_para = copy_G_params(netG)
         load_params(netG, avg_param_G)
-        torch.save(netG.state_dict(),
-                   '%s/netG_epoch_%d.pth' % (self.model_dir, epoch))
+        torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (self.model_dir, epoch))
+        
+        
         load_params(netG, backup_para)
         #
         for i in range(len(netsD)):
             netD = netsD[i]
-            torch.save(netD.state_dict(),
-                       '%s/netD%d.pth' % (self.model_dir, i))
+            torch.save(netD.state_dict(), '%s/netD%d.pth' % (self.model_dir, i))
+        
         print('Save G/Ds models.')
 
     def set_requires_grad_value(self, models_list, brequires):
@@ -184,8 +185,8 @@ class Trainer(object):
                 p.requires_grad = brequires
 
     def save_img_results(self, netG, noise, sent_emb, words_embs, mask,
-                         image_encoder, captions, cap_lens,
-                         gen_iterations, name='current'):
+                            image_encoder, captions, cap_lens,
+                            gen_iterations, name='current'):
         # Save images
         fake_imgs, attention_maps, _, _ = netG(noise, sent_emb, words_embs, mask)
         for i in range(len(attention_maps)):
@@ -199,12 +200,15 @@ class Trainer(object):
             att_sze = attn_maps.size(2)
             img_set, _ = \
                 build_super_images(img, captions, self.ixtoword,
-                                   attn_maps, att_sze, lr_imgs=lr_img)
+                                    attn_maps, att_sze, lr_imgs=lr_img)
             if img_set is not None:
                 im = Image.fromarray(img_set)
                 fullpath = '%s/G_%s_%d_%d.png' \
-                           % (self.image_dir, name, gen_iterations, i)
+                            % (self.image_dir, name, gen_iterations, i)
                 im.save(fullpath)
+
+
+
 
         i = -1
         img = fake_imgs[i].detach()
@@ -216,11 +220,13 @@ class Trainer(object):
                                     None, self.batch_size)
         img_set, _ = \
             build_super_images(fake_imgs[i].detach().cpu(),
-                               captions, self.ixtoword, att_maps, att_sze)
+                                captions, self.ixtoword, att_maps, att_sze)
         if img_set is not None:
             im = Image.fromarray(img_set)
             fullpath = '%s/D_%s_%d.png' \
-                       % (self.image_dir, name, gen_iterations)
+                        % (self.image_dir, name, gen_iterations)
+            
+            
             im.save(fullpath)
 
     def train(self):
@@ -237,6 +243,7 @@ class Trainer(object):
             noise, fixed_noise = noise.cuda(), fixed_noise.cuda()
 
         gen_iterations = 0
+
         for epoch in range(start_epoch, self.max_epoch):
             start_t = time.time()
 
@@ -267,7 +274,7 @@ class Trainer(object):
                 for i in range(len(netsD)):
                     netsD[i].zero_grad()
                     errD = discriminator_loss(netsD[i], imgs[i], fake_imgs[i],
-                                              sent_emb, real_labels, fake_labels)
+                                                sent_emb, real_labels, fake_labels)
                     # backward and update parameters
                     errD.backward()
                     optimizersD[i].step()
@@ -281,7 +288,7 @@ class Trainer(object):
                 netG.zero_grad()
                 errG_total, G_logs = \
                     generator_loss(netsD, image_encoder, caption_cnn, caption_rnn, captions, fake_imgs, real_labels,
-                                   words_embs, sent_emb, match_labels, cap_lens, class_ids)
+                                    words_embs, sent_emb, match_labels, cap_lens, class_ids)
                 kl_loss = KL_loss(mu, logvar)
                 errG_total += kl_loss
                 G_logs += 'kl_loss: %.2f ' % kl_loss.data[0]
@@ -298,16 +305,16 @@ class Trainer(object):
                     backup_para = copy_G_params(netG)
                     load_params(netG, avg_param_G)
                     self.save_img_results(netG, fixed_noise, sent_emb,
-                                          words_embs, mask, image_encoder,
-                                          captions, cap_lens, epoch, name='average')
+                                            words_embs, mask, image_encoder,
+                                            captions, cap_lens, epoch, name='average')
                     load_params(netG, backup_para)
             end_t = time.time()
 
             print('''[%d/%d][%d]
-                  Loss_D: %.2f Loss_G: %.2f Time: %.2fs'''
-                  % (epoch, self.max_epoch, self.num_batches,
-                     errD_total.data[0], errG_total.data[0],
-                     end_t - start_t))
+                    Loss_D: %.2f Loss_G: %.2f Time: %.2fs'''
+                    % (epoch, self.max_epoch, self.num_batches,
+                        errD_total.data[0], errG_total.data[0],
+                        end_t - start_t))
 
             if epoch % cfg.TRAIN.SNAPSHOT_INTERVAL == 0:  # and epoch != 0:
                 self.save_model(netG, avg_param_G, netsD, epoch)
@@ -315,7 +322,7 @@ class Trainer(object):
         self.save_model(netG, avg_param_G, netsD, self.max_epoch)
 
     def save_singleimages(self, images, filenames, save_dir,
-                          split_dir, sentenceID=0):
+                            split_dir, sentenceID=0):
         for i in range(images.size(0)):
             s_tmp = '%s/single_samples/%s/%s' % \
                     (save_dir, split_dir, filenames[i])
