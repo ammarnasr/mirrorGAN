@@ -220,9 +220,9 @@ class TextDataset(data.Dataset):
                 ixtoword, wordtoix, len(ixtoword)]
 
     def load_text_data(self, data_dir, split):
-        #filepath = os.path.join(data_dir, 'bird_captions.pickle')
+        filepath = os.path.join(data_dir, 'bird_captions.pickle')
         #Use Attention Caption pickle
-        filepath = os.path.join(data_dir, 'attn_captions.pickle')
+        #filepath = os.path.join(data_dir, 'attn_captions.pickle')
         train_names = self.load_filenames(data_dir, 'train')
         test_names = self.load_filenames(data_dir, 'test')
         print ('--------------------Load Text Data--------------------------------------')
