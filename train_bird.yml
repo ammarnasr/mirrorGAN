@@ -31,7 +31,7 @@ CAP:
     num_layers: 1
     learning_rate: 0.001
     caption_cnn_path: '../data/STREAM/encoder-5-3000.pkl'
-    caption_rnn_path: '../data/STREAM/rnn_decoder.ckpt'
+    caption_rnn_path: '../data/STREAM/decoder-5-3000.pkl'
 
 GAN:
     DF_DIM: 64
