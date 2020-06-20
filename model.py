@@ -720,9 +720,13 @@ class CAPTION_RNN(nn.Module):
         """Set the hyper-parameters and build the layers."""
         super(CAPTION_RNN, self).__init__()
         self.embed = nn.Embedding(vocab_size, embed_size)
+        print ('self.embed:', self.embed)
         self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
+        print ('self.lstm:', self.lstm)
         self.linear = nn.Linear(hidden_size, vocab_size)
+        print ('self.linear:', self.linear)
         self.max_seg_length = max_seq_length
+        print ('self.linear:', self.linear)
 
     # def forward(self, features, captions, cap_lens):
     #     """Decode image feature vectors and generates captions."""
