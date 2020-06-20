@@ -50,8 +50,7 @@ class Trainer(object):
 
         image_encoder = CNN_ENCODER(cfg.TEXT.EMBEDDING_DIM)
         img_encoder_path = cfg.TRAIN.NET_E.replace('text_encoder', 'image_encoder')
-        state_dict = \
-            torch.load(img_encoder_path, map_location=lambda storage, loc: storage)
+        state_dict = torch.load(img_encoder_path, map_location=lambda storage, loc: storage)
         image_encoder.load_state_dict(state_dict)
         for p in image_encoder.parameters():
             p.requires_grad = False
