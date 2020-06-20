@@ -117,7 +117,9 @@ class TextDataset(data.Dataset):
         
         print('Calling Load Class ID')
         self.class_id = self.load_class_id(split_dir, len(self.filenames))
+        print('Finished Load Class ID ')
         self.number_example = len(self.filenames)
+        print('Number of Example:', self.number_example)
 
     def load_bbox(self):
         data_dir = self.data_dir
