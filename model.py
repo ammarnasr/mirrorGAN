@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 from cfg.config import cfg
 from GLAttention import GLAttentionGeneral as ATT_NET
+import time
 
 
 class GLU(nn.Module):
@@ -168,8 +169,9 @@ class CNN_ENCODER(nn.Module):
         else:
             self.nef = 256  # define a uniform ranker
         print('----before----')
+        inception_v3_time = time.time()
         model = models.inception_v3()
-        print('----after----')
+        print('----after----',time.time() -  inception_v3_time)
         url = 'https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth'
         model.load_state_dict(model_zoo.load_url(url))
         for param in model.parameters():
