@@ -111,10 +111,11 @@ class TextDataset(data.Dataset):
         else:
             self.bbox = None
         split_dir = os.path.join(data_dir, split)
-
-        self.filenames, self.captions, self.ixtoword, \
-            self.wordtoix, self.n_words = self.load_text_data(data_dir, split)
-
+        
+        print('Calling Load text data')
+        self.filenames, self.captions, self.ixtoword, self.wordtoix, self.n_words = self.load_text_data(data_dir, split)
+        
+        print('Calling Load Class ID')
         self.class_id = self.load_class_id(split_dir, len(self.filenames))
         self.number_example = len(self.filenames)
 
