@@ -132,9 +132,13 @@ class RNN_ENCODER(nn.Module):
             return Variable(weight.new(self.nlayers * self.num_directions,
                                        bsz, self.nhidden).zero_())
 
-    def forward(self, captions, cap_lens, hidden, mask=None):
+    def forward(self, captions, cap_lens, chidden, mask=None):
         # input: torch.LongTensor of size batch x n_steps
         # --> emb: batch x n_steps x ninput
+        print("captions",captions)
+        print("cap_lens",cap_lens)
+        print("chidden",chidden)
+        print("mask",mask)
         emb = self.drop(self.encoder(captions))
         #
         # Returns: a PackedSequence object
