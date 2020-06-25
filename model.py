@@ -409,7 +409,7 @@ class NEXT_STAGE_G(nn.Module):
         self.gf_dim = ngf
         self.ef_dim = nef
         self.cf_dim = ncf
-        # print(ngf, nef, ncf)  (32, 256, 100)
+        print(ngf, nef, ncf) # (32, 256, 100)
         # (32, 256, 100)
         self.num_residual = cfg.GAN.R_NUM
         self.define_module()
@@ -496,7 +496,10 @@ class G_NET(nn.Module):
             self.img_net1 = GET_IMAGE_G(ngf)
         # gf x 64 x 64
         if cfg.TREE.BRANCH_NUM > 1:
+            print("Calling INIT_STAGE_G with ngf=",ngf,' and nef=',nef,' and ncf=',ncf)
             self.h_net2 = NEXT_STAGE_G(ngf, nef, ncf)
+            print("Back at G_NET")
+            print("Calling GET_IMAGE_G with ngf=",ngf)
             self.img_net2 = GET_IMAGE_G(ngf)
         if cfg.TREE.BRANCH_NUM > 2:
             self.h_net3 = NEXT_STAGE_G(ngf, nef, ncf)
