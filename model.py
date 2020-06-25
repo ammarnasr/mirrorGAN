@@ -137,7 +137,7 @@ class RNN_ENCODER(nn.Module):
         # --> emb: batch x n_steps x ninput
         print("captions",captions)
         print("cap_lens",cap_lens)
-        print("chidden",chidden)
+        print("chidden",len(chidden))
         print("mask",mask)
         emb = self.drop(self.encoder(captions))
         #
@@ -150,8 +150,8 @@ class RNN_ENCODER(nn.Module):
         # #or a PackedSequence object:
         # tensor containing output features (h_t) from the last layer of RNN
         print("RNN: ", self.rnn)
-        print(chidden.size())
-        output, hidden = self.rnn(emb, hidden)
+        print(chidden[0].size())
+        output, hidden = self.rnn(emb, chidden)
         # PackedSequence object
         # --> (batch, seq_len, hidden_size * num_directions)
         output = pad_packed_sequence(output, batch_first=True)[0]
