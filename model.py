@@ -557,9 +557,16 @@ class G_NET(nn.Module):
         if cfg.TREE.BRANCH_NUM > 2:
             h_code3, att2 = self.h_net3(h_code2, c_code, word_embs, mask)
             fake_img3 = self.img_net3(h_code3)
+            print("The output of h_net3 & img_net3 (inputs 'h_code2 , c_code, word_embs, mask ' & 'h_code3 below') :vvvvvvvvvvvv")
+            print ("h_code3", h_code3.size())
+            print ("att2", att2.size())
+            print ("fake_img3", fake_img3.size())
             fake_imgs.append(fake_img3)
             if att2 is not None:
                 att_maps.append(att2)
+
+            print("len(fake_imgs)", len(fake_imgs))
+            print("len(att_maps)", len(att_maps))
 
         return fake_imgs, att_maps, mu, logvar
 
