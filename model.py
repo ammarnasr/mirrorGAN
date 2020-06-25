@@ -130,7 +130,7 @@ class RNN_ENCODER(nn.Module):
                                         bsz, self.nhidden).zero_()))
         else:
             return Variable(weight.new(self.nlayers * self.num_directions,
-                                       bsz, self.nhidden).zero_())
+                                        bsz, self.nhidden).zero_())
 
     def forward(self, captions, cap_lens, chidden, mask=None):
         # input: torch.LongTensor of size batch x n_steps
@@ -282,9 +282,13 @@ class CA_NET(nn.Module):
     def __init__(self):
         super(CA_NET, self).__init__()
         self.t_dim = cfg.TEXT.EMBEDDING_DIM
+        print("number of Text_Embedding features = ", self.t_dim)
         self.c_dim = cfg.GAN.CONDITION_DIM
+        print("number of GAN_Condition features = ", self.c_dim)
         self.fc = nn.Linear(self.t_dim, self.c_dim * 4, bias=True)
+        print("CA fully connected Layer :", self.fc)
         self.relu = GLU()
+        print("CA relu GLU Layer :", self.relu)
 
     def encode(self, text_embedding):
         x = self.relu(self.fc(text_embedding))
@@ -464,8 +468,12 @@ class G_NET(nn.Module):
     def __init__(self):
         super(G_NET, self).__init__()
         ngf = cfg.GAN.GF_DIM
+        print("number of Generator features = ", ngf)
         nef = cfg.TEXT.EMBEDDING_DIM
+        print("number of Embedding features = ", nef)
         ncf = cfg.GAN.CONDITION_DIM
+        print("number of Condition features = ", nef)
+        print('Calling CA_NET')
         self.ca_net = CA_NET()
 
         if cfg.TREE.BRANCH_NUM > 0:
