@@ -4,7 +4,7 @@ import torch.nn as nn
 def conv1x1(in_planes, out_planes):
     "1x1 convolution with padding"
     return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=1,
-                     padding=0, bias=False)
+                        padding=0, bias=False)
 
 
 def func_attention(query, context, gamma1):
@@ -56,6 +56,12 @@ class GLAttentionGeneral(nn.Module):
         self.linear = nn.Linear(100, idf)
         self.sm = nn.Softmax()
         self.mask = None
+        print("self.conv_context",self.conv_context) 
+        print("self.conv_sentence_vis",self.conv_sentence_vis)
+        print("self.linear",self.linear) 
+        print("self.sm",self.sm)
+        print("self.mask",self.mask)
+        
 
     def applyMask(self, mask):
         self.mask = mask  # batch x sourceL
