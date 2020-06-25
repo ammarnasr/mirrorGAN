@@ -519,12 +519,21 @@ class G_NET(nn.Module):
             :param mask: batch x seq_len
             :return:
         """
-        print ('------------------- THE FORWO')
+        print ('------------------- THE FORWARD OF G-NET------------------------------------')
+        print("The inputs :vvvvvvvvvvvv")
+        print("z_code", z_code.size())
+        print("sent_emb", sent_emb.size())
+        print("word_embs", word_embs.size())
+        print("mask", mask.szie())
         fake_imgs = []
         att_maps = []
         '''this is the Conditioning Augmentation'''
         # print('sent_emb:', sent_emb.size())  #('sent_emb:', (16, 256))
         c_code, mu, logvar = self.ca_net(sent_emb)
+        print("The output of ca_net :vvvvvvvvvvvv")
+        print("c_code: ", c_code.size() )
+        print("mu: ", mu.size() )
+        print("logvar: ",  logvar.size())
         # print('=====')
         # print('first c_code.size():', c_code.size())  #(16, 100)
         # print('=====')
