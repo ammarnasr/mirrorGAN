@@ -467,6 +467,7 @@ class GET_IMAGE_G(nn.Module):
             conv3x3(ngf, 3),
             nn.Tanh()
         )
+        print ("GET_IMAGE_G after init stage:", self.img)
 
     def forward(self, h_code):
         out_img = self.img(h_code)
@@ -490,6 +491,8 @@ class G_NET(nn.Module):
 
             print("Calling INIT_STAGE_G with ngf=",ngf*16,' and ncf=',ncf)
             self.h_net1 = INIT_STAGE_G(ngf * 16, ncf)
+            print("Back at G_NET")
+            print("Calling GET_IMAGE_G with ngf=",ngf)
             self.img_net1 = GET_IMAGE_G(ngf)
         # gf x 64 x 64
         if cfg.TREE.BRANCH_NUM > 1:
