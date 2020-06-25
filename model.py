@@ -316,6 +316,8 @@ class INIT_STAGE_G(nn.Module):
         super(INIT_STAGE_G, self).__init__()
         self.gf_dim = ngf
         self.in_dim = cfg.GAN.Z_DIM + ncf  # cfg.TEXT.EMBEDDING_DIM
+        print("GF of INIT_STAGE_G :", self.gf_dim)
+        print("in_dim of INIT_STAGE_G :", self.in_dim)
 
         self.define_module()
 
@@ -325,6 +327,11 @@ class INIT_STAGE_G(nn.Module):
             nn.Linear(nz, ngf * 4 * 4 * 2, bias=False),
             nn.BatchNorm1d(ngf * 4 * 4 * 2),
             GLU())
+        print("Fully Connected LAyer of INIT_STAGE_G :", self.fc)
+        print("Linear from ", nz, " to ", ngf * 4 * 4 * 2)
+        print("GLU from ", ngf * 4 * 4 * 2, " to ", ngf * 4 * 4)
+
+        
 
         self.upsample1 = upBlock(ngf, ngf // 2)
         self.upsample2 = upBlock(ngf // 2, ngf // 4)
@@ -475,8 +482,11 @@ class G_NET(nn.Module):
         print("number of Condition features = ", nef)
         print('Calling CA_NET')
         self.ca_net = CA_NET()
+        print("Back at G_NET")
 
         if cfg.TREE.BRANCH_NUM > 0:
+
+            print("Calling INIT_STAGE_G with ngf=",ngf*16,' and ncf=',ncf)
             self.h_net1 = INIT_STAGE_G(ngf * 16, ncf)
             self.img_net1 = GET_IMAGE_G(ngf)
         # gf x 64 x 64
