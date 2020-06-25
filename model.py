@@ -519,6 +519,7 @@ class G_NET(nn.Module):
             :param mask: batch x seq_len
             :return:
         """
+        print ('------------------- THE FORWO')
         fake_imgs = []
         att_maps = []
         '''this is the Conditioning Augmentation'''
