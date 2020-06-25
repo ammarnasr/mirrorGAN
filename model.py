@@ -530,7 +530,7 @@ class G_NET(nn.Module):
         '''this is the Conditioning Augmentation'''
         # print('sent_emb:', sent_emb.size())  #('sent_emb:', (16, 256))
         c_code, mu, logvar = self.ca_net(sent_emb)
-        print("The output of ca_net :vvvvvvvvvvvv")
+        print("The output of ca_net (inputs 'sent_emb') :vvvvvvvvvvvv")
         print("c_code: ", c_code.size() )
         print("mu: ", mu.size() )
         print("logvar: ",  logvar.size())
@@ -540,17 +540,22 @@ class G_NET(nn.Module):
         if cfg.TREE.BRANCH_NUM > 0:
             h_code1 = self.h_net1(z_code, c_code)
             fake_img1 = self.img_net1(h_code1)
+            print("The output of h_net1 & img_net1 (inputs 'z_code , c_code ' & 'h_code1 below') :vvvvvvvvvvvv")
+            print ("h_code1", h_code1.size())
+            print ("fake_img1", fake_img1.size())
             fake_imgs.append(fake_img1)
         if cfg.TREE.BRANCH_NUM > 1:
-            h_code2, att1 = \
-                self.h_net2(h_code1, c_code, word_embs, mask)
+            h_code2, att1 = self.h_net2(h_code1, c_code, word_embs, mask)
             fake_img2 = self.img_net2(h_code2)
+            print("The output of h_net2 & img_net2 (inputs 'h_code1 , c_code, word_embs, mask ' & 'h_code2 below') :vvvvvvvvvvvv")
+            print ("h_code2", h_code2.size())
+            print ("att1", att1.size())
+            print ("fake_img2", fake_img2.size())
             fake_imgs.append(fake_img2)
             if att1 is not None:
                 att_maps.append(att1)
         if cfg.TREE.BRANCH_NUM > 2:
-            h_code3, att2 = \
-                self.h_net3(h_code2, c_code, word_embs, mask)
+            h_code3, att2 = self.h_net3(h_code2, c_code, word_embs, mask)
             fake_img3 = self.img_net3(h_code3)
             fake_imgs.append(fake_img3)
             if att2 is not None:
