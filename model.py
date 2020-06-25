@@ -524,7 +524,7 @@ class G_NET(nn.Module):
         print("z_code", z_code.size())
         print("sent_emb", sent_emb.size())
         print("word_embs", word_embs.size())
-        print("mask", mask.szie())
+        print("mask", mask.size())
         fake_imgs = []
         att_maps = []
         '''this is the Conditioning Augmentation'''
