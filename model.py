@@ -409,11 +409,12 @@ class NEXT_STAGE_G(nn.Module):
         self.gf_dim = ngf
         self.ef_dim = nef
         self.cf_dim = ncf
-        print(ngf, nef, ncf) # (32, 256, 100)
         # (32, 256, 100)
         self.num_residual = cfg.GAN.R_NUM
         self.define_module()
         self.conv = conv1x1(ngf * 3, ngf * 2)
+        print("ngf, nef, ncf, self.num_residual, self.conv", ngf, nef, ncf, self.num_residual, self.conv) # (32, 256, 100)
+
 
     def _make_layer(self, block, channel_num):
         layers = []
@@ -423,7 +424,9 @@ class NEXT_STAGE_G(nn.Module):
 
     def define_module(self):
         ngf = self.gf_dim
+        print ("Calling ATT_NET with idf =  ", ngf,"cdf = ", self.ef_dim)
         self.att = ATT_NET(ngf, self.ef_dim)
+        print("back at NEXT_STAGE_G")
         self.residual = self._make_layer(ResBlock, ngf * 2)
         self.upsample = upBlock(ngf * 2, ngf)
 
@@ -496,7 +499,7 @@ class G_NET(nn.Module):
             self.img_net1 = GET_IMAGE_G(ngf)
         # gf x 64 x 64
         if cfg.TREE.BRANCH_NUM > 1:
-            print("Calling INIT_STAGE_G with ngf=",ngf,' and nef=',nef,' and ncf=',ncf)
+            print("Calling NEXT_STAGE_G with ngf=",ngf,' and nef=',nef,' and ncf=',ncf)
             self.h_net2 = NEXT_STAGE_G(ngf, nef, ncf)
             print("Back at G_NET")
             print("Calling GET_IMAGE_G with ngf=",ngf)
