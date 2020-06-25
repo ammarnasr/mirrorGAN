@@ -428,7 +428,10 @@ class NEXT_STAGE_G(nn.Module):
         self.att = ATT_NET(ngf, self.ef_dim)
         print("back at NEXT_STAGE_G")
         self.residual = self._make_layer(ResBlock, ngf * 2)
+        print("self.residual", self.residual)
         self.upsample = upBlock(ngf * 2, ngf)
+        print("self.upsample", self.upsample)
+
 
     def forward(self, h_code, c_code, word_embs, mask):
         """
