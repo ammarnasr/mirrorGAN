@@ -741,6 +741,7 @@ class CAPTION_RNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers, max_seq_length=20):
         """Set the hyper-parameters and build the layers."""
         super(CAPTION_RNN, self).__init__()
+        vocab_size = 9956
         self.embed = nn.Embedding(vocab_size, embed_size)
         print ('self.embed:', self.embed)
         self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
