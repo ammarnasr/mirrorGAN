@@ -149,6 +149,8 @@ class RNN_ENCODER(nn.Module):
         # #output (batch, seq_len, hidden_size * num_directions)
         # #or a PackedSequence object:
         # tensor containing output features (h_t) from the last layer of RNN
+        print("RNN: ", self.rnn)
+        print(chidden.size())
         output, hidden = self.rnn(emb, hidden)
         # PackedSequence object
         # --> (batch, seq_len, hidden_size * num_directions)
@@ -479,7 +481,7 @@ class G_NET(nn.Module):
         nef = cfg.TEXT.EMBEDDING_DIM
         print("number of Embedding features = ", nef)
         ncf = cfg.GAN.CONDITION_DIM
-        print("number of Condition features = ", nef)
+        print("number of Condition features = ", ncf)
         print('Calling CA_NET')
         self.ca_net = CA_NET()
         print("Back at G_NET")
@@ -749,7 +751,7 @@ class CAPTION_RNN(nn.Module):
         self.linear = nn.Linear(hidden_size, vocab_size)
         print ('self.linear:', self.linear)
         self.max_seg_length = max_seq_length
-        print ('self.linear:', self.linear)
+        print ('max_seg_length:', self.max_seg_length)
 
     # def forward(self, features, captions, cap_lens):
     #     """Decode image feature vectors and generates captions."""
