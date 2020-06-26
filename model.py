@@ -451,6 +451,12 @@ class NEXT_STAGE_G(nn.Module):
             c_code1: batch x idf x queryL
             att1: batch x sourceL x queryL
         """
+        print ('-------THE START OF NEXT_STAGE_G-------')
+        print('1.h_code    : ', h_code.size())
+        print('2.c_code    : ', c_code.size())
+        print('3.word_embs : ', word_embs.size())
+        print('4.mask      : ', mask.size())
+
         # print('========')
         # ((16, 32, 64, 64), (16, 100), (16, 256, 18), (16, 18))
         # print(h_code.size(), c_code.size(), word_embs.size(), mask.size())
@@ -473,6 +479,8 @@ class NEXT_STAGE_G(nn.Module):
         # print('out_code:', out_code.size())
         # state size ngf/2 x 2in_size x 2in_size
         out_code = self.upsample(out_code)
+        print ('-------THE START OF NEXT_STAGE_G-------')
+
         return out_code, att
 
 
@@ -534,7 +542,7 @@ class G_NET(nn.Module):
             :param mask: batch x seq_len
             :return:
         """
-        print ('------------------- THE FORWARD OF G-NET------------------------------------')
+        print ('------------------- THE START OF G-NET------------------------------------')
         print("The inputs :vvvvvvvvvvvv")
         print("z_code", z_code.size())
         print("sent_emb", sent_emb.size())
@@ -582,6 +590,7 @@ class G_NET(nn.Module):
 
             print("len(fake_imgs)", len(fake_imgs))
             print("len(att_maps)", len(att_maps))
+        print ('------------------- THE END OF G-NET------------------------------------')
 
         return fake_imgs, att_maps, mu, logvar
 
