@@ -76,14 +76,22 @@ class GLAttentionGeneral(nn.Module):
             queryL=ih x iw
         """
         print ('-------THE START OF GLAttentionGeneral-------')
+        print('1.input   : ', input.size())
+        print('2.sentence: ', sentence.size())
+        print('3.context : ', context.size())
 
         idf, ih, iw = input.size(1), input.size(2), input.size(3)
+        print('(idf, ih, iw)', idf, ih, iw)
         queryL = ih * iw
+        print('queryL = ih * iw =>', queryL) 
         batch_size, sourceL = context.size(0), context.size(2)
+        print("batch_size, sourceL", batch_size, sourceL)
 
         # generated image feature:--> batch x queryL x idf
         target = input.view(batch_size, -1, queryL)             # batch x idf x queryL
+        print('target = input.view(batch_size, -1, queryL) => ', target.size())
         targetT = torch.transpose(target, 1, 2).contiguous()    # batch x queryL x idf
+        print('targetT = torch.transpose(target, 1, 2).contiguous() => ' , target.size())
 
 
         # Eq(4) in MirrorGAN : local-level attention
