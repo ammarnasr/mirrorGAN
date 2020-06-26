@@ -346,7 +346,7 @@ class INIT_STAGE_G(nn.Module):
         :param c_code: batch x cfg.TEXT.EMBEDDING_DIM
         :return: batch x ngf/16 x 64 x 64
         """
-        print ('-------THE FORWARD OF INIT_STAGE_G-------')
+        print ('-------THE START OF INIT_STAGE_G-------')
         print('inputs z_code(' ,z_code.size(), ') , c_code(' ,c_code.size(), ')')
         c_z_code = torch.cat((c_code, z_code), 1)
         print ('c_z_code = torch.cat((c_code, z_code), 1) =>', c_z_code.size())
@@ -367,6 +367,7 @@ class INIT_STAGE_G(nn.Module):
         # state size ngf/16 x 64 x 64
         out_code64 = self.upsample4(out_code32)
         print('out_code64 = self.upsample4(out_code32) =>', out_code64.size())
+        print ('-------THE END OF INIT_STAGE_G-------')
 
 
         return out_code64
@@ -486,7 +487,11 @@ class GET_IMAGE_G(nn.Module):
         print ("GET_IMAGE_G after init stage:", self.img)
 
     def forward(self, h_code):
+        print ('-------THE START OF GET_IMAGE_G-------')
+        print('input h_code :', h_code.size())
         out_img = self.img(h_code)
+        print('out_img = self.img(h_code) =>', out_img.size())
+        print ('-------THE END OF GET_IMAGE_G-------')
         return out_img
 
 #G_NET used in the paper
