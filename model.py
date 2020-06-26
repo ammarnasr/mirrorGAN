@@ -347,7 +347,7 @@ class INIT_STAGE_G(nn.Module):
         :return: batch x ngf/16 x 64 x 64
         """
         print ('-------THE FORWARD OF INIT_STAGE_G-------')
-        print('inputs z_code(',z_code.size(),') , c_code(',c_code.size()')')
+        print('inputs z_code(' ,z_code.size(), ') , c_code(' ,c_code.size(), ')')
         c_z_code = torch.cat((c_code, z_code), 1)
         # state size ngf x 4 x 4
         out_code = self.fc(c_z_code)
