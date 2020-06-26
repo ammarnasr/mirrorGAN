@@ -75,6 +75,7 @@ class GLAttentionGeneral(nn.Module):
             sentence (c_code1): batch x idf x queryL (this is the vectors of the sentence)
             queryL=ih x iw
         """
+        print ('-------THE START OF GLAttentionGeneral-------')
 
         idf, ih, iw = input.size(1), input.size(2), input.size(3)
         queryL = ih * iw
@@ -118,6 +119,7 @@ class GLAttentionGeneral(nn.Module):
         sentence_vs = self.conv_sentence_vis(sentence_vs) # batch x idf x ih x iw
         sent_att = nn.Softmax()(sentence_vs)  # batch x idf x ih x iw
         weightedSentence = torch.mul(sentence, sent_att)  # batch x idf x ih x iw
+        print ('-------THE END OF GLAttentionGeneral-------')
 
         return weightedContext, weightedSentence, word_attn, sent_att
 
