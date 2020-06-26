@@ -138,7 +138,7 @@ def words_loss(img_features, words_emb, labels,
 
 # ##################Loss for G and Ds##############################
 def discriminator_loss(netD, real_imgs, fake_imgs, conditions,
-                       real_labels, fake_labels):
+                        real_labels, fake_labels):
     # Forward
     real_features = netD(real_imgs)
     fake_features = netD(fake_imgs.detach())
@@ -166,8 +166,8 @@ def discriminator_loss(netD, real_imgs, fake_imgs, conditions,
 
 
 def generator_loss(netsD, image_encoder, caption_cnn, caption_rnn, captions, fake_imgs, real_labels,
-                   words_embs, sent_emb, match_labels,
-                   cap_lens, class_ids):
+                    words_embs, sent_emb, match_labels,
+                    cap_lens, class_ids):
     numDs = len(netsD)
     logs = ''
     # Forward

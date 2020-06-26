@@ -132,20 +132,21 @@ class GLAttentionGeneral(nn.Module):
         print ('word_attn = attn.view(batch_size, -1, ih, iw) => ', word_attn.size())
 
         # Eq(5) in MirrorGAN : global-level attention
-        sentence = self.linear(sentence)
-        print('sentence = self.linear(sentence) => ', sentence.size()) 
-        sentence = sentence.view(batch_size, idf, 1, 1)
-        print('sentence = sentence.view(batch_size, idf, 1, 1) => ', sentence.size()) 
-        sentence = sentence.repeat(1, 1, ih, iw)
-        print('sentence = sentence.repeat(1, 1, ih, iw) => ', sentence.size()) 
-        sentence_vs = torch.mul(input, sentence)   # batch x idf x ih x iw
-        print('sentence_vs = torch.mul(input, sentence) =>', sentence_vs.size())   # batch x idf x ih x iw
-        sentence_vs = self.conv_sentence_vis(sentence_vs) # batch x idf x ih x iw
-        print('sentence_vs = torch.mul(input, sentence) =>', sentence_vs.size())   # batch x idf x ih x iw
-        sent_att = nn.Softmax()(sentence_vs)  # batch x idf x ih x iw
-        print('sent_att = nn.Softmax()(sentence_vs) => ', sent_att.size())  # batch x idf x ih x iw
-        weightedSentence = torch.mul(sentence, sent_att)  # batch x idf x ih x iw
+        sentence                = self.linear(sentence)
+        print('sentence         = self.linear(sentence) => ', sentence.size()) 
+        sentence                = sentence.view(batch_size, idf, 1, 1)
+        print('sentence         = sentence.view(batch_size, idf, 1, 1) => ', sentence.size()) 
+        sentence                = sentence.repeat(1, 1, ih, iw)
+        print('sentence         = sentence.repeat(1, 1, ih, iw) => ', sentence.size()) 
+        sentence_vs             = torch.mul(input, sentence)   # batch x idf x ih x iw
+        print('sentence_vs      = torch.mul(input, sentence) =>', sentence_vs.size())   # batch x idf x ih x iw
+        sentence_vs             = self.conv_sentence_vis(sentence_vs) # batch x idf x ih x iw
+        print('sentence_vs      = self.conv_sentence_vis(sentence_vs) =>', sentence_vs.size())   # batch x idf x ih x iw
+        sent_att                = nn.Softmax()(sentence_vs)  # batch x idf x ih x iw
+        print('sent_att         = nn.Softmax()(sentence_vs) => ', sent_att.size())  # batch x idf x ih x iw
+        weightedSentence        = torch.mul(sentence, sent_att)  # batch x idf x ih x iw
         print('weightedSentence = torch.mul(sentence, sent_att) =>', weightedSentence.size())  # batch x idf x ih x iw
+        
         print ('-------THE END OF GLAttentionGeneral-------')
 
         return weightedContext, weightedSentence, word_attn, sent_att

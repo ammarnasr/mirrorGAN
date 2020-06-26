@@ -228,6 +228,7 @@ class Trainer(object):
             
             im.save(fullpath)
 
+
     def train(self):
         text_encoder, image_encoder, caption_cnn, caption_rnn, netG, netsD, start_epoch = self.build_models()
         avg_param_G = copy_G_params(netG)
@@ -285,8 +286,7 @@ class Trainer(object):
                 step += 1
                 gen_iterations += 1
                 netG.zero_grad()
-                errG_total, G_logs = \
-                    generator_loss(netsD, image_encoder, caption_cnn, caption_rnn, captions, fake_imgs, real_labels,
+                errG_total, G_logs = generator_loss(netsD, image_encoder, caption_cnn, caption_rnn, captions, fake_imgs, real_labels,
                                     words_embs, sent_emb, match_labels, cap_lens, class_ids)
                 kl_loss = KL_loss(mu, logvar)
                 errG_total += kl_loss
