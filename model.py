@@ -349,17 +349,25 @@ class INIT_STAGE_G(nn.Module):
         print ('-------THE FORWARD OF INIT_STAGE_G-------')
         print('inputs z_code(' ,z_code.size(), ') , c_code(' ,c_code.size(), ')')
         c_z_code = torch.cat((c_code, z_code), 1)
+        print ('c_z_code = torch.cat((c_code, z_code), 1) =>', c_z_code.size())
         # state size ngf x 4 x 4
         out_code = self.fc(c_z_code)
+        print ('out_code = self.fc(c_z_code) =>', out_code.size())
         out_code = out_code.view(-1, self.gf_dim, 4, 4)
+        print ('out_code = out_code.view(-1, self.gf_dim, 4, 4) =>', out_code.size())
         # state size ngf/3 x 8 x 8
         out_code = self.upsample1(out_code)
+        print('out_code = self.upsample1(out_code) =>', out_code.size())
         # state size ngf/4 x 16 x 16
         out_code = self.upsample2(out_code)
+        print('out_code = self.upsample2(out_code) =>', out_code.size())
         # state size ngf/8 x 32 x 32
         out_code32 = self.upsample3(out_code)
+        print('out_code = self.upsample3(out_code) =>', out_code.size())
         # state size ngf/16 x 64 x 64
         out_code64 = self.upsample4(out_code32)
+        print('out_code = self.upsample4(out_code) =>', out_code.size())
+
 
         return out_code64
 
