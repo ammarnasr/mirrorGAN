@@ -91,42 +91,61 @@ class GLAttentionGeneral(nn.Module):
         target = input.view(batch_size, -1, queryL)             # batch x idf x queryL
         print('target = input.view(batch_size, -1, queryL) => ', target.size())
         targetT = torch.transpose(target, 1, 2).contiguous()    # batch x queryL x idf
-        print('targetT = torch.transpose(target, 1, 2).contiguous() => ' , target.size())
+        print('targetT = torch.transpose(target, 1, 2).contiguous() => ' , targetT.size())
 
 
         # Eq(4) in MirrorGAN : local-level attention
         # words feature:  batch x cdf x sourceL --> batch x cdf x sourceL x 1
         sourceT = context.unsqueeze(3)
+        print('sourceT = context.unsqueeze(3) =>', sourceT.size() )
         # --> batch x idf x sourceL
         sourceT = self.conv_context(sourceT).squeeze(3)
+        print('sourceT = self.conv_context(sourceT).squeeze(3) =>', sourceT.size() )
 
         attn = torch.bmm(targetT, sourceT)
+        print('attn = torch.bmm(targetT, sourceT) =>', attn.size())
         # --> batch*queryL x sourceL
         attn = attn.view(batch_size*queryL, sourceL)
+        print('attn.view(batch_size*queryL, sourceL) =>', attn.size())
         if self.mask is not None:
             # batch_size x sourceL --> batch_size*queryL x sourceL
+            print("self.mask: ", self.mask.size())
             mask = self.mask.repeat(queryL, 1)
+            print('mask = self.mask.repeat(queryL, 1) => ', mask.size())
             attn.data.masked_fill_(mask.data, -float('inf'))
+            print('attn.data.masked_fill_(mask.data, -float("inf")) => ' , attn.size() )
         attn = self.sm(attn)  # Eq. (2)
+        print('attn = self.sm(attn) => ' , attn.size() )
         # --> batch x queryL x sourceL
         attn = attn.view(batch_size, queryL, sourceL)
+        print('attn = attn.view(batch_size, queryL, sourceL) => ' , attn.size() )
         # --> batch x sourceL x queryL
         attn = torch.transpose(attn, 1, 2).contiguous()
-
+        print('attn = torch.transpose(attn, 1, 2).contiguous() => ' , attn.size() )
         # (batch x idf x sourceL)(batch x sourceL x queryL)
         # --> batch x idf x queryL
         weightedContext = torch.bmm(sourceT, attn)
+        print('weightedContext = torch.bmm(sourceT, attn) => ', weightedContext.size())
         weightedContext = weightedContext.view(batch_size, -1, ih, iw)  # batch x idf x ih x iw
+        print('weightedContext = weightedContext.view(batch_size, -1, ih, iw) => ', weightedContext.size())
         word_attn = attn.view(batch_size, -1, ih, iw)  # (batch x sourceL x ih x iw)
+        print ('word_attn = attn.view(batch_size, -1, ih, iw) => ', word_attn.size())
 
         # Eq(5) in MirrorGAN : global-level attention
         sentence = self.linear(sentence)
+        print('sentence = self.linear(sentence) => ', sentence.size()) 
         sentence = sentence.view(batch_size, idf, 1, 1)
+        print('sentence = sentence.view(batch_size, idf, 1, 1) => ', sentence.size()) 
         sentence = sentence.repeat(1, 1, ih, iw)
+        print('sentence = sentence.repeat(1, 1, ih, iw) => ', sentence.size()) 
         sentence_vs = torch.mul(input, sentence)   # batch x idf x ih x iw
+        print('sentence_vs = torch.mul(input, sentence) =>', sentence_vs.size())   # batch x idf x ih x iw
         sentence_vs = self.conv_sentence_vis(sentence_vs) # batch x idf x ih x iw
+        print('sentence_vs = torch.mul(input, sentence) =>', sentence_vs.size())   # batch x idf x ih x iw
         sent_att = nn.Softmax()(sentence_vs)  # batch x idf x ih x iw
+        print('sent_att = nn.Softmax()(sentence_vs) => ', sent_att.size())  # batch x idf x ih x iw
         weightedSentence = torch.mul(sentence, sent_att)  # batch x idf x ih x iw
+        print('weightedSentence = torch.mul(sentence, sent_att) =>', weightedSentence.size())  # batch x idf x ih x iw
         print ('-------THE END OF GLAttentionGeneral-------')
 
         return weightedContext, weightedSentence, word_attn, sent_att
