@@ -363,10 +363,10 @@ class INIT_STAGE_G(nn.Module):
         print('out_code = self.upsample2(out_code) =>', out_code.size())
         # state size ngf/8 x 32 x 32
         out_code32 = self.upsample3(out_code)
-        print('out_code = self.upsample3(out_code) =>', out_code.size())
+        print('out_code32 = self.upsample3(out_code) =>', out_code32.size())
         # state size ngf/16 x 64 x 64
         out_code64 = self.upsample4(out_code32)
-        print('out_code = self.upsample4(out_code) =>', out_code.size())
+        print('out_code64 = self.upsample4(out_code32) =>', out_code64.size())
 
 
         return out_code64
